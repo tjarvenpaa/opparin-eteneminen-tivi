@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Opinnäytetyön eteneminen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=10" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <h1>OPINNÄYTETYÖN ETENEMINEN</h1>
+        <div class="toolbar">
+          <div class="seminar-picker-wrap">
+            <label for="seminarSelect">Loppuseminaari</label>
+            <select id="seminarSelect" aria-label="Valitse loppuseminaari"></select>
+          </div>
+          <button id="printButton" type="button" class="print-button">Tulosta A4</button>
+        </div>
+      </header>
+
+      <p class="subtitle">Oma työpohja: vaihe, aikataulu, tehtävät ja valmis tuotos</p>
+
+      <section id="timeline" class="timeline" aria-live="polite"></section>
+    </main>
+
+    <script src="script.js?v=6"></script>
+  </body>
+</html>
