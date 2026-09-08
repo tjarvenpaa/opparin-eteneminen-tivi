@@ -18,3 +18,7 @@ Tämän repon tarkoitus on tuottaa tästä automaattinen aikataulurunko, perustu
 Alla lomake paperimuotoisena:
 
 ![Eteneminen](pictures/eteneminen.png)
+
+## demo julkaisu
+
+Sivustoa pääsee katsomaan livenä [netlify](https://tivi-opparin-eteneminen.netlify.app/)
