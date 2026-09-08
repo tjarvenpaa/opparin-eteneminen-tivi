@@ -1,0 +1,60 @@
+## Käyttöjärjestelmä ja editorit
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+## Ympäristömuuttujat ja salaisuudet
+.env
+.env.*
+!.env.example
+*.secret
+*.secrets
+*.pem
+*.key
+*.crt
+
+## Dockerin paikallinen sisältö ja override-konfiguraatiot
+docker-compose.override.yml
+docker-compose.override.yaml
+docker-compose.local.yml
+docker-compose.local.yaml
+docker-data/
+docker-volumes/
+docker-storage/
+docker-cache/
+**/docker-data/
+**/docker-volumes/
+**/docker-storage/
+
+## Paikalliset konfiguraatiot
+config.local.*
+*.local.json
+*.local.yml
+*.local.yaml
+*.local.ini
+
+## Lokit ja väliaikaiset tiedostot
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+
+## Rakennus- ja riippuvuustiedostot
+node_modules/
+vendor/
+dist/
+build/
+coverage/
+__pycache__/
+*.py[cod]
+
+## Paikalliset tietokannat ja Dockerin kehitysdumpit
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.sql.gz
