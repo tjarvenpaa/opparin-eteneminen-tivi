@@ -21,6 +21,8 @@ docker-compose.override.yml
 docker-compose.override.yaml
 docker-compose.local.yml
 docker-compose.local.yaml
+docker-compose.yml
+Dockerfile
 docker-data/
 docker-volumes/
 docker-storage/
@@ -35,6 +37,7 @@ config.local.*
 *.local.yml
 *.local.yaml
 *.local.ini
+*.conf
 
 ## Lokit ja väliaikaiset tiedostot
 *.log
