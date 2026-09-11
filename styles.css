@@ -474,12 +474,12 @@ h1 {
 
   .timeline {
     gap: 0;
-    padding-left: 92px;
+    padding: 0 20px 0 160px;
     page-break-inside: avoid;
   }
 
   .timeline::before {
-    left: 78px;
+    left: 146px;
     top: 6px;
     bottom: 6px;
     width: 1px;
@@ -492,7 +492,7 @@ h1 {
   .date-rail {
     right: calc(100% + 13px);
     top: 10px;
-    width: 70px;
+    width: 135px;
   }
 
   .date-rail-point {
@@ -692,30 +692,16 @@ h1 {
 
 @media print {
   .timeline {
-    padding-left: 300px;
+    padding: 0 20px 0 160px;
   }
 
   .timeline::before {
-    left: 286px;
+    left: 146px;
   }
 
   .date-rail {
     right: calc(100% + 13px);
-    width: 280px;
-  }
-
-  .date-rail-entry {
-    margin-bottom: 3px;
-  }
-
-  .date-rail-entry strong {
-    font-size: 6.5pt;
-    line-height: 1.2;
-    text-align: right;
-  }
-
-  .date-rail-caption {
-    font-size: 5.5pt;
-    line-height: 1.2;
+    width: 135px;
   }
 }
+
