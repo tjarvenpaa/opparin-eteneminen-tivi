@@ -12,22 +12,23 @@ const phaseDefinitions = [
   {
     id: 'aihe',
     number: 1,
-    title: 'Aihe & rajaus',
-    subtitle: 'Noin 16 vk ennen päätöstä',
+    title: 'Aihe-ehdotus',
+    subtitle: 'Noin 18–16 vk ennen päätöstä',
     color: 'orange',
     startOffsetWeeks: 18,
     endOffsetWeeks: 16,
     tasks: [
-      'Tunnista ratkaistava ongelma',
-      'Tee aiheen rajaus ja määritä tavoite',
-      'Aihe-ehdotus Wihin'
+      'Pohdi, mikä on sinulle kiinnostava aihe',
+      'tutki aihetta ja siitä tehtyjä opinnäytetöitä esim. theseus.fi',
+      'Keskustele aiheesta lehtoreiden kanssa tai käytä AI bottia apuna',
+      'Aihe-ehdotus Wihiin'
     ],
     badge: 'Hyväksytty aihe'
   },
   {
     id: 'suunnittelu',
     number: 2,
-    title: 'Suunnittelu',
+    title: 'Opinnäytetyösuunnitelma ja aikataulu',
     subtitle: 'Noin 15–13 vk ennen',
     color: 'purple',
     startOffsetWeeks: 15,
@@ -69,7 +70,7 @@ const phaseDefinitions = [
       'Lähetä raportti ohjaajalle tarkistettavaksi',
       'Tee tarvittavat korjaukset ja viimeistele raportti'
     ],
-    badge: 'Arvioitu ja arvioitu työ'
+    badge: 'Viestinnän tarkistus'
   },
   {
     id: 'paatos',
@@ -85,7 +86,7 @@ const phaseDefinitions = [
       'plagioinnin tarkistus',
       'työn julkaisu Theseukseen'
     ],
-    badge: 'Loppuseminaari'
+    badge: 'Arvioitu ja arkistoitu työ'
   }
 ];
 
@@ -127,8 +128,9 @@ function formatDateTime(date) {
 
 function getPhaseTasks(phase, seminarDate) {
   const tasks = phase.tasks.map((text) => ({ text }));
+  const phaseId = (phase.id || '').toLowerCase();
 
-  if (phase.id === 'viimeistely') {
+  if (phase.number === 4 || phaseId === 'viimeistely') {
     const communicationReviewDate = formatDate(getCommunicationReviewDate(seminarDate));
     const deadline = `3 vk ennen loppuseminaaria: ${communicationReviewDate}`;
 
@@ -180,7 +182,7 @@ function generateImplementationMeetings(seminarDate) {
   }
 
   const last = meetings[meetings.length - 1];
-  if (!last || last > phaseEnd) {
+  if (!last || last < phaseEnd) {
     meetings.push(new Date(phaseEnd));
   }
 
@@ -191,20 +193,20 @@ function generateFinalReviewMeeting(seminarDate, implementationMeetings) {
   const seminar = new Date(`${seminarDate}T10:30:00`);
   const phaseWindowStart = addDay(seminar, -(4 * 7));
   const phaseWindowEnd = addDay(seminar, -(2 * 7));
-  const candidate = addDay(seminar, -7);
+  const defaultMeetingDate = addDay(seminar, -(3 * 7));
 
   const lastImplementation = implementationMeetings.length
     ? implementationMeetings[implementationMeetings.length - 1]
     : null;
 
-  let selected = candidate;
+  let selected = defaultMeetingDate;
 
-  if (lastImplementation && lastImplementation > phaseWindowStart) {
-    selected = addDay(lastImplementation, 7);
+  if (lastImplementation) {
+    selected = addDay(lastImplementation, 14);
   }
 
   if (selected < phaseWindowStart || selected > phaseWindowEnd) {
-    selected = candidate;
+    selected = defaultMeetingDate;
   }
 
   return [selected];
@@ -215,26 +217,32 @@ function generatePostSeminarMeeting(seminarDate) {
   return [addDay(seminar, 7)];
 }
 
-function getGuidanceMeetingsForPhase(seminarDate, phaseId) {
+function getGuidanceMeetingsForPhase(seminarDate, phase) {
+  const phaseId = (typeof phase === 'object' && phase !== null) ? (phase.id || '').toLowerCase() : String(phase).toLowerCase();
+  const phaseNumber = (typeof phase === 'object' && phase !== null) ? phase.number : null;
   const implementationMeetings = generateImplementationMeetings(seminarDate);
 
-  switch (phaseId) {
-    case 'suunnittelu':
-      return generatePlanningMeeting(seminarDate);
-    case 'toteutus':
-      return implementationMeetings;
-    case 'viimeistely':
-      return generateFinalReviewMeeting(seminarDate, implementationMeetings);
-    case 'paatos':
-      return generatePostSeminarMeeting(seminarDate);
-    default:
-      return [];
+  if (phaseNumber === 2 || phaseId === 'suunnittelu' || phaseId === 'suunnitelma') {
+    return generatePlanningMeeting(seminarDate);
   }
+  if (phaseNumber === 3 || phaseId === 'toteutus') {
+    return implementationMeetings;
+  }
+  if (phaseNumber === 4 || phaseId === 'viimeistely') {
+    return generateFinalReviewMeeting(seminarDate, implementationMeetings);
+  }
+  if (phaseNumber === 5 || phaseId === 'paatos' || phaseId === 'päätös' || phaseId === 'paatosvaihe') {
+    return generatePostSeminarMeeting(seminarDate);
+  }
+  return [];
 }
 
 function renderPhase(phase, seminarDate, guidanceMeetings) {
   const dateRange = getDateRange(seminarDate, phase.startOffsetWeeks, phase.endOffsetWeeks);
-  const guidanceLabel = phase.id === 'paatos' ? 'Arviointi' : 'Teams-ohjaus';
+  const phaseId = (phase.id || '').toLowerCase();
+  const isPhase5 = (phase.number === 5 || phaseId === 'paatos' || phaseId === 'päätös');
+  const isPhase4 = (phase.number === 4 || phaseId === 'viimeistely');
+  const guidanceLabel = isPhase5 ? 'Arviointi' : 'Teams-ohjaus';
   const phaseCard = document.createElement('article');
   phaseCard.className = 'phase';
   phaseCard.dataset.color = phase.color;
@@ -256,6 +264,26 @@ function renderPhase(phase, seminarDate, guidanceMeetings) {
         .join('')
     : '<li class="meeting-item muted"><span>Ei erillistä ohjausta</span></li>';
 
+  let goalBoxHtml = '';
+  if (isPhase4) {
+    const communicationReviewDate = formatDate(getCommunicationReviewDate(seminarDate));
+    goalBoxHtml = `
+      <div class="goal-box goal-box-deadline">
+        <span class="deadline-tag">Määräaika</span>
+        <strong>Viestinnän tarkistus</strong>
+        <span class="deadline-sub">3 vk ennen loppuseminaaria: ${communicationReviewDate}</span>
+      </div>
+    `;
+  } else {
+    goalBoxHtml = `
+      <div class="goal-box">
+        <div>
+          <strong>${phase.badge}</strong>
+        </div>
+      </div>
+    `;
+  }
+
   phaseCard.innerHTML = `
     <div class="phase-header">
       <span class="phase-number">${phase.number}</span>
@@ -276,11 +304,7 @@ function renderPhase(phase, seminarDate, guidanceMeetings) {
         <ul class="meeting-list">${guidanceList}</ul>
       </div>
 
-      <div class="goal-box">
-        <div>
-          <strong>${phase.badge}</strong>
-        </div>
-      </div>
+      ${goalBoxHtml}
     </div>
   `;
 
@@ -292,12 +316,15 @@ function renderTimeline(selectedId) {
   timelineEl.innerHTML = '';
 
   phaseDefinitions.forEach((phase) => {
-    const guidanceMeetings = getGuidanceMeetingsForPhase(selected.id, phase.id);
-    const railGuidanceLabel = phase.id === 'paatos' ? 'Arviointi' : 'Ohjaus';
+    const guidanceMeetings = getGuidanceMeetingsForPhase(selected.id, phase);
+    const phaseId = (phase.id || '').toLowerCase();
+    const isPhase5 = (phase.number === 5 || phaseId === 'paatos' || phaseId === 'päätös');
+    const isPhase4 = (phase.number === 4 || phaseId === 'viimeistely');
+    const railGuidanceLabel = isPhase5 ? 'Arviointi' : 'Ohjaus';
     const dateRange = getDateRange(selected.id, phase.startOffsetWeeks, phase.endOffsetWeeks);
-    const additionalDates = phase.id === 'viimeistely'
+    const additionalDates = isPhase4
       ? `<div class="date-rail-entry"><span class="date-rail-caption">Viestinnän tarkistus</span><strong>${formatDate(getCommunicationReviewDate(selected.id))}</strong></div>`
-      : phase.id === 'paatos'
+      : isPhase5
         ? `<div class="date-rail-entry"><span class="date-rail-caption">Ilmoittautuminen</span><strong>${formatDateTime(getRegistrationDeadline(selected.id))}</strong></div>
            <div class="date-rail-entry"><span class="date-rail-caption">Loppuseminaari</span><strong>${formatDate(new Date(`${selected.id}T10:30:00`))}</strong></div>`
         : '';
@@ -323,8 +350,8 @@ function renderTimeline(selectedId) {
   const note = document.createElement('div');
   note.className = 'note';
   note.innerHTML = `
-    <span><strong>Työ etenee vaiheittain, mutta totetus ja raportointi kulkevat rinnakkain.</strong></span>
-    <span>Varaa ohjausajat ajoissa ja pidä omat tavoitteet jokaisessa vaiheessa.</span>
+    <span><strong>Työ etenee vaiheittain, mutta toteutus ja raportointi kulkevat rinnakkain.</strong></span>
+    <span><strong>Varaa ohjausajat ajoissa ja pidä omat tavoitteet jokaisessa vaiheessa.</strong></span>
   `;
   timelineEl.appendChild(note);
 }

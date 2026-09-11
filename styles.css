@@ -272,7 +272,7 @@ h1 {
 
 .task-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   font-size: 0.95rem;
   line-height: 1.25;
@@ -293,6 +293,7 @@ h1 {
   background: rgba(255,255,255,0.35);
   display: inline-block;
   flex-shrink: 0;
+  margin-top: 2px;
 }
 
 .guidance-box {
@@ -363,6 +364,33 @@ h1 {
   font-size: 1rem;
 }
 
+.goal-box-deadline {
+  background: #111 !important;
+  color: #fff !important;
+  border-color: #111 !important;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.goal-box-deadline .deadline-tag {
+  color: #ffd700;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.goal-box-deadline strong {
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.goal-box-deadline .deadline-sub {
+  color: #e0e0e0;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
 .phase[data-color="orange"] .phase-header { background: #f59a63; }
 .phase[data-color="purple"] .phase-header { background: #b284d6; }
 .phase[data-color="cyan"] .phase-header { background: #4ec7c1; }
@@ -431,17 +459,17 @@ h1 {
   }
 
   .topbar {
-    margin-bottom: 8px;
+    margin-bottom: 4px;
   }
 
   h1 {
-    font-size: 20pt;
+    font-size: 17pt;
     letter-spacing: 0;
   }
 
   .subtitle {
-    font-size: 10pt;
-    margin-bottom: 10px;
+    font-size: 8pt;
+    margin-bottom: 5px;
   }
 
   .timeline {
@@ -458,7 +486,7 @@ h1 {
   }
 
   .timeline-row {
-    padding-bottom: 3px;
+    padding-bottom: 1px;
   }
 
   .date-rail {
@@ -495,22 +523,22 @@ h1 {
   }
 
   .phase-header {
-    min-height: 28px;
-    font-size: 8pt;
-    padding: 4px 5px;
+    min-height: 24px;
+    font-size: 7pt;
+    padding: 3px 5px;
     letter-spacing: 0;
   }
 
   .phase-number {
-    width: 18px;
-    height: 18px;
-    font-size: 8pt;
-    margin-right: 6px;
+    width: 16px;
+    height: 16px;
+    font-size: 7pt;
+    margin-right: 5px;
   }
 
   .phase-content {
-    gap: 6px;
-    padding: 5px 7px 6px;
+    gap: 3px;
+    padding: 4px 7px;
   }
 
   .date-row,
@@ -523,7 +551,7 @@ h1 {
   .task-item,
   .meeting-item,
   .goal-box {
-    font-size: 7.3pt;
+    font-size: 6.7pt;
   }
 
   .date-text {
@@ -538,13 +566,13 @@ h1 {
   }
 
   .task-list {
-    gap: 4px;
+    gap: 2px;
   }
 
   .task-item {
     align-items: flex-start;
     gap: 5px;
-    line-height: 1.15;
+    line-height: 1.1;
   }
 
   .checkbox {
@@ -555,27 +583,54 @@ h1 {
   }
 
   .guidance-box {
-    padding: 5px 5px 3px;
+    padding: 3px 5px 2px;
     background: #fff;
   }
 
   .meeting-list {
-    gap: 3px;
+    gap: 1px;
   }
 
   .meeting-item {
     border-top-color: rgba(0,0,0,0.25);
-    padding-top: 2px;
+    padding-top: 1px;
     gap: 4px;
   }
 
   .goal-box {
-    min-height: 28px;
-    padding: 4px 5px;
+    min-height: 24px;
+    padding: 3px 5px;
     background: rgba(0,0,0,0.04);
     border-width: 1px;
     font-size: 7.2pt;
     line-height: 1.1;
+  }
+
+  .goal-box-deadline {
+    background: #111 !important;
+    color: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    padding: 3px 4px;
+    gap: 1px;
+  }
+
+  .goal-box-deadline .deadline-tag {
+    color: #ffd700 !important;
+    font-size: 5.5pt;
+    letter-spacing: 0.04em;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .goal-box-deadline strong {
+    color: #fff !important;
+    font-size: 6.8pt;
+  }
+
+  .goal-box-deadline .deadline-sub {
+    color: #e8e8e8 !important;
+    font-size: 6pt;
   }
 
   .note {
